@@ -76,9 +76,7 @@
       outline: none; transition: border-color 0.25s;
       width: 100%;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--dorado);
-    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--dorado); }
     .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
     .form-select option { background: var(--negro3); }
     .form-textarea { resize: none; min-height: 80px; }
@@ -90,10 +88,9 @@
       cursor: pointer; transition: background 0.3s, transform 0.2s; margin-top: 6px;
     }
     .btn-modal-enviar:hover { background: var(--rojo2); transform: translateY(-1px); }
-    /* Confirmación */
-    .modal-confirm {
-      display: none; text-align: center; padding: 20px 0;
-    }
+    .btn-modal-enviar:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .modal-error { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.4); color: var(--rojo2); font-size: 13px; padding: 12px 16px; border-radius: 3px; display: none; line-height: 1.5; }
+    .modal-confirm { display: none; text-align: center; padding: 20px 0; }
     .modal-confirm-icon { font-size: 52px; margin-bottom: 16px; }
     .modal-confirm h3 { font-family: 'Bebas Neue'; font-size: 32px; color: var(--dorado); letter-spacing: 2px; margin-bottom: 10px; }
     .modal-confirm p { font-size: 14px; color: var(--gris); line-height: 1.7; }
@@ -315,8 +312,6 @@
 <div id="modal-reserva" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
   <div class="modal-box">
     <button class="modal-close" id="modal-cerrar" aria-label="Cerrar">&times;</button>
-
-    <!-- Formulario -->
     <div id="modal-form-wrap">
       <div class="modal-logo">🥊</div>
       <div class="modal-title" id="modal-titulo">Solicitar Reserva</div>
@@ -324,7 +319,7 @@
       <form class="modal-form" id="form-reserva" novalidate>
         <div class="form-group">
           <label class="form-label" for="f-espacio">Espacio que deseas reservar</label>
-          <select class="form-select" id="f-espacio" required>
+          <select class="form-select" id="f-espacio" name="espacio" required>
             <option value="" disabled selected>Selecciona un espacio…</option>
             <option value="Sala Privada — Celebraciones & Grupos">🎉 Sala Privada — Celebraciones & Grupos</option>
             <option value="Sala Inferior — Reuniones & Negocios">💼 Sala Inferior — Reuniones & Negocios</option>
@@ -334,21 +329,20 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="f-motivo">¿Para qué lo necesitas?</label>
-          <textarea class="form-textarea" id="f-motivo" placeholder="Cuéntanos brevemente el motivo de tu reserva…" required></textarea>
+          <textarea class="form-textarea" id="f-motivo" name="motivo" placeholder="Cuéntanos brevemente el motivo de tu reserva…" required></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label" for="f-nombre">Tu nombre</label>
-          <input class="form-input" id="f-nombre" type="text" placeholder="Nombre completo" required autocomplete="off"/>
+          <label class="form-label" for="f-nombre">Tu nombre IC</label>
+          <input class="form-input" id="f-nombre" name="nombre" type="text" placeholder="Nombre completo" required autocomplete="off"/>
         </div>
         <div class="form-group">
-          <label class="form-label" for="f-telefono">Teléfono de contacto</label>
-          <input class="form-input" id="f-telefono" type="text" placeholder="Número de teléfono" required autocomplete="off"/>
+          <label class="form-label" for="f-telefono">Teléfono IC</label>
+          <input class="form-input" id="f-telefono" name="telefono" type="text" placeholder="Número de teléfono" required autocomplete="off"/>
         </div>
-        <button type="submit" class="btn-modal-enviar">Enviar solicitud</button>
+        <div class="modal-error" id="modal-error">Ha ocurrido un error al enviar. Por favor, inténtalo de nuevo.</div>
+        <button type="submit" class="btn-modal-enviar" id="btn-enviar">Enviar solicitud</button>
       </form>
     </div>
-
-    <!-- Confirmación -->
     <div class="modal-confirm" id="modal-confirmacion">
       <div class="modal-confirm-icon">✅</div>
       <h3>¡Solicitud enviada!</h3>
@@ -703,17 +697,22 @@
   });
 
   // ── MODAL RESERVA ──
-  const modal        = document.getElementById('modal-reserva');
-  const modalCerrar  = document.getElementById('modal-cerrar');
-  const formWrap     = document.getElementById('modal-form-wrap');
-  const formReserva  = document.getElementById('form-reserva');
-  const confirmacion = document.getElementById('modal-confirmacion');
+  const modal         = document.getElementById('modal-reserva');
+  const modalCerrar   = document.getElementById('modal-cerrar');
+  const formWrap      = document.getElementById('modal-form-wrap');
+  const formReserva   = document.getElementById('form-reserva');
+  const confirmacion  = document.getElementById('modal-confirmacion');
   const selectEspacio = document.getElementById('f-espacio');
+  const modalError    = document.getElementById('modal-error');
+  const btnEnviar     = document.getElementById('btn-enviar');
 
   function abrirModal(espacio) {
     formWrap.style.display = '';
     confirmacion.style.display = 'none';
+    modalError.style.display = 'none';
     formReserva.reset();
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar solicitud';
     if (espacio) selectEspacio.value = espacio;
     modal.classList.add('visible');
     document.body.style.overflow = 'hidden';
@@ -724,7 +723,6 @@
     document.body.style.overflow = '';
   }
 
-  // Botones que abren el modal
   document.querySelectorAll('.abrir-modal').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -732,39 +730,58 @@
     });
   });
 
-  // Cerrar con botón X
   modalCerrar.addEventListener('click', cerrarModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
 
-  // Cerrar clicando el overlay
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) cerrarModal();
-  });
-
-  // Cerrar con Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') cerrarModal();
-  });
-
-  // Envío del formulario
-  formReserva.addEventListener('submit', (e) => {
+  // ── ENVÍO CON FORMSPREE ──
+  formReserva.addEventListener('submit', async (e) => {
     e.preventDefault();
     const espacio  = document.getElementById('f-espacio').value;
     const motivo   = document.getElementById('f-motivo').value.trim();
     const nombre   = document.getElementById('f-nombre').value.trim();
     const telefono = document.getElementById('f-telefono').value.trim();
-    if (!espacio || !motivo || !nombre || !telefono) {
-      // Resaltar campos vacíos
-      [document.getElementById('f-espacio'), document.getElementById('f-motivo'),
-       document.getElementById('f-nombre'), document.getElementById('f-telefono')].forEach(el => {
-        el.style.borderColor = (!el.value.trim() && el.tagName !== 'SELECT') || (el.tagName === 'SELECT' && !el.value)
-          ? 'var(--rojo2)' : '';
+
+    // Validación
+    let hayError = false;
+    [document.getElementById('f-espacio'), document.getElementById('f-motivo'),
+     document.getElementById('f-nombre'), document.getElementById('f-telefono')].forEach(el => {
+      const vacio = el.tagName === 'SELECT' ? !el.value : !el.value.trim();
+      el.style.borderColor = vacio ? 'var(--rojo2)' : '';
+      if (vacio) hayError = true;
+    });
+    if (hayError) return;
+
+    // Envío
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviando…';
+    modalError.style.display = 'none';
+
+    try {
+      const res = await fetch('https://formspree.io/f/xeenwzqq', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          espacio,
+          motivo,
+          nombre,
+          telefono,
+          _subject: '🥊 Nueva solicitud de reserva — Tequi-La-La'
+        })
       });
-      return;
+
+      if (res.ok) {
+        formWrap.style.display = 'none';
+        confirmacion.style.display = 'block';
+        setTimeout(cerrarModal, 4000);
+      } else {
+        throw new Error('Error en el servidor');
+      }
+    } catch (err) {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'Enviar solicitud';
+      modalError.style.display = 'block';
     }
-    // Mostrar confirmación
-    formWrap.style.display = 'none';
-    confirmacion.style.display = 'block';
-    setTimeout(cerrarModal, 3500);
   });
 </script>
 </body>
