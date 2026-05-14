@@ -249,7 +249,7 @@
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a { color: var(--gris); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s; }
     .nav-links a:hover { color: var(--dorado); }
-    .nav-reserva { background: var(--rojo); color: white; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; letter-spacing: 1px; transition: background 0.3s; cursor: pointer; border: none; }
+    .nav-reserva { background: var(--rojo); color: white; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; letter-spacing: 1px; transition: background 0.3s; }
     .nav-reserva:hover { background: var(--rojo2); }
     .nav-discord { background: #5865F2; color: white; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; letter-spacing: 1px; transition: background 0.3s; }
     .nav-discord:hover { background: #4752c4; }
@@ -268,7 +268,7 @@
     .hero-divider { width: 80px; height: 2px; background: linear-gradient(to right, transparent, var(--dorado), transparent); margin: 28px auto; }
     .hero-claim { font-size: clamp(16px, 2.5vw, 22px); color: var(--blanco); font-style: italic; font-weight: 300; max-width: 600px; line-height: 1.6; }
     .hero-btns { display: flex; gap: 16px; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
-    .btn-primary { background: var(--rojo); color: white; padding: 16px 36px; border-radius: 6px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.3s, transform 0.2s; cursor: pointer; border: none; display: inline-block; }
+    .btn-primary { background: var(--rojo); color: white; padding: 16px 36px; border-radius: 6px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.3s, transform 0.2s; display: inline-block; }
     .btn-primary:hover { background: var(--rojo2); transform: translateY(-2px); }
     .btn-secondary { background: transparent; color: var(--dorado); padding: 16px 36px; border-radius: 6px; font-size: 14px; font-weight: 700; text-decoration: none; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid var(--dorado); transition: background 0.3s, transform 0.2s; }
     .btn-secondary:hover { background: rgba(201,163,78,0.1); transform: translateY(-2px); }
@@ -296,7 +296,7 @@
     /* ── ZONAS ── */
     .zonas-bg { background: var(--negro2); padding: 100px 0; }
     .zonas-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-    .zonas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 60px; }
+    .zonas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 40px; }
     .zona-card { position: relative; overflow: hidden; cursor: pointer; }
     .zona-card img { width: 100%; height: 380px; object-fit: cover; display: block; transition: transform 0.6s; }
     .zona-card:hover img { transform: scale(1.05); }
@@ -537,7 +537,7 @@
     <li class="solo-postulacion"><a href="#plantilla">Plantilla</a></li>
     <li class="solo-postulacion"><a href="#direccion">Dirección</a></li>
   </ul>
-  <!-- Botón nav → ancla a #reservas -->
+  <!-- Botón nav → ancla a #reservas (sin modal) -->
   <a href="#reservas" class="nav-reserva solo-publico">Reservar Espacio</a>
   <a href="#contacto" class="nav-discord solo-postulacion">Discord</a>
 </nav>
@@ -550,7 +550,7 @@
   <div class="hero-sub">Bar · Ring · Sala Privada</div>
   <div class="hero-divider"></div>
   <p class="hero-claim">"Donde la noche, los acuerdos y el combate encuentran su sitio."</p>
-  <!-- Botones hero → anclan a #reservas -->
+  <!-- Botones hero → anclan a #reservas (sin modal) -->
   <div class="hero-btns solo-publico">
     <a href="#reservas" class="btn-primary">Reservar espacio</a>
     <a href="#menu" class="btn-secondary">Ver menú</a>
@@ -588,7 +588,7 @@
     <div class="section-divider"></div>
     <p style="color:var(--gris); max-width:640px; font-size:15px; line-height:1.7;">Dos plantas, seis zonas. Cada rincón del Tequi-La-La tiene su propia personalidad y sus propias posibilidades.</p>
   </div>
-  <div class="zonas-grid" style="margin-top:40px;">
+  <div class="zonas-grid">
     <div class="zona-card"><img src="img/barra.jpg" alt="Barra"/><div class="zona-overlay"><div class="zona-num">01</div><div class="zona-name">La Barra</div><div class="zona-desc">El corazón del local. Atención directa, carta completa y el mejor ambiente de la noche.</div></div></div>
     <div class="zona-card"><img src="img/escenario.jpg" alt="Escenario"/><div class="zona-overlay"><div class="zona-num">02</div><div class="zona-name">El Escenario</div><div class="zona-desc">Música en directo, artistas y actuaciones exclusivas para los que más lo merecen.</div></div></div>
     <div class="zona-card"><img src="img/ring.jpg" alt="Ring"/><div class="zona-overlay"><div class="zona-num">03</div><div class="zona-name">El Ring</div><div class="zona-desc">Veladas de boxeo, exhibiciones y eventos deportivos. Reserva el ring para tu evento.</div></div></div>
