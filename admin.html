@@ -11,6 +11,7 @@
       --rojo: #c0392b; --rojo2: #e74c3c;
       --dorado: #c9a34e; --dorado2: #e8c47a;
       --verde: #27ae60; --verde2: #2ecc71;
+      --azul: #5865F2; --azul2: #7289da;
       --blanco: #f5efe6; --gris: #888880;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -95,9 +96,24 @@
     }
     .btn-volver:hover { background:rgba(201,163,78,0.1); }
 
+    /* TABS */
+    .tabs-bar {
+      max-width:1200px; margin:32px auto 0; padding:0 40px;
+      display:flex; gap:6px; border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .tab-btn {
+      background:transparent; border:none; border-bottom:3px solid transparent;
+      color:var(--gris); padding:12px 24px; font-size:12px; font-weight:700;
+      letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+      transition:color 0.2s, border-color 0.2s; margin-bottom:-1px;
+    }
+    .tab-btn:hover { color:var(--dorado); }
+    .tab-btn.active { color:var(--dorado); border-bottom-color:var(--dorado); }
+    .tab-btn.active.azul-tab { color:var(--azul2); border-bottom-color:var(--azul2); }
+
     /* STATS */
     .stats-bar {
-      max-width:1200px; margin:40px auto 0; padding:0 40px;
+      max-width:1200px; margin:32px auto 0; padding:0 40px;
       display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
     }
     .stat-card {
@@ -108,7 +124,7 @@
     .stat-card.total::before { background:linear-gradient(to right, var(--dorado), var(--dorado2)); }
     .stat-card.pendiente::before { background:linear-gradient(to right, var(--rojo), var(--rojo2)); }
     .stat-card.gestionado::before { background:linear-gradient(to right, var(--verde), var(--verde2)); }
-    .stat-card.hoy::before { background:linear-gradient(to right, #5865F2, #7289da); }
+    .stat-card.hoy::before { background:linear-gradient(to right, var(--azul), var(--azul2)); }
     .stat-num { font-family:'Bebas Neue'; font-size:52px; line-height:1; color:var(--blanco); }
     .stat-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gris); margin-top:6px; }
 
@@ -135,13 +151,13 @@
     }
     .btn-borrar-todo:hover { border-color:var(--rojo); color:var(--rojo2); }
 
-    /* LISTA RESERVAS */
+    /* LISTA */
     .reservas-lista {
       max-width:1200px; margin:32px auto 60px; padding:0 40px;
       display:grid; grid-template-columns:repeat(2,1fr); gap:20px;
     }
 
-    /* TARJETA */
+    /* TARJETA RESERVA */
     .res-card {
       background:var(--negro2); border:1px solid rgba(255,255,255,0.06);
       border-radius:2px; padding:28px; position:relative; overflow:hidden;
@@ -185,6 +201,31 @@
     }
     .btn-eliminar:hover { border-color:var(--rojo); color:var(--rojo); }
 
+    /* TARJETA CONTACTO */
+    .con-card {
+      background:var(--negro2); border:1px solid rgba(255,255,255,0.06);
+      border-left:3px solid var(--azul);
+      border-radius:2px; padding:28px; position:relative; overflow:hidden;
+      transition:border-color 0.3s, transform 0.2s;
+    }
+    .con-card:hover { transform:translateY(-2px); border-color:rgba(88,101,242,0.3); }
+    .con-card.leido { border-left-color:var(--verde); }
+    .con-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+    .con-nombre { font-family:'Bebas Neue'; font-size:26px; color:var(--blanco); letter-spacing:1px; }
+    .con-estado {
+      font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+      padding:4px 12px; border-radius:20px; flex-shrink:0;
+    }
+    .con-estado.nuevo { background:rgba(88,101,242,0.15); border:1px solid rgba(88,101,242,0.4); color:var(--azul2); }
+    .con-estado.leido { background:rgba(39,174,96,0.15); border:1px solid rgba(39,174,96,0.4); color:var(--verde2); }
+
+    /* STATS CONTACTOS */
+    .stats-bar-con {
+      max-width:1200px; margin:32px auto 0; padding:0 40px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    }
+    .stat-card.nuevos::before { background:linear-gradient(to right, var(--azul), var(--azul2)); }
+
     /* VACÍO */
     .empty-state {
       grid-column:1/-1; text-align:center; padding:80px 20px;
@@ -193,12 +234,6 @@
     .empty-icon { font-size:52px; margin-bottom:20px; }
     .empty-title { font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; margin-bottom:10px; }
     .empty-sub { font-size:14px; color:var(--gris); line-height:1.7; }
-
-    /* LOADING */
-    .loading-state {
-      grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--gris);
-      font-size:13px; letter-spacing:3px; text-transform:uppercase;
-    }
 
     /* TOAST */
     #toast {
@@ -211,11 +246,16 @@
     }
     #toast.visible { transform:translateX(-50%) translateY(0); opacity:1; }
 
+    /* SECCIONES */
+    .seccion { display:none; }
+    .seccion.visible { display:block; }
+
     @media(max-width:900px) {
-      .stats-bar { grid-template-columns:1fr 1fr; padding:0 20px; }
+      .stats-bar, .stats-bar-con { grid-template-columns:1fr 1fr; padding:0 20px; }
       .reservas-lista { grid-template-columns:1fr; padding:0 20px; }
       .filtros-bar { padding:0 20px; }
       .admin-nav { padding:0 20px; }
+      .tabs-bar { padding:0 20px; }
     }
   </style>
 </head>
@@ -251,30 +291,56 @@
     </div>
   </nav>
 
-  <div class="stats-bar">
-    <div class="stat-card total"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total reservas</div></div>
-    <div class="stat-card pendiente"><div class="stat-num" id="stat-pendiente">0</div><div class="stat-label">Pendientes</div></div>
-    <div class="stat-card gestionado"><div class="stat-num" id="stat-gestionado">0</div><div class="stat-label">Gestionadas</div></div>
-    <div class="stat-card hoy"><div class="stat-num" id="stat-hoy">0</div><div class="stat-label">Hoy</div></div>
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="reservas">🏠 Reservas</button>
+    <button class="tab-btn" data-tab="contactos">✉️ Contactos</button>
   </div>
 
-  <div class="filtros-bar">
-    <button class="filtro-btn active" data-filtro="todas">Todas</button>
-    <button class="filtro-btn" data-filtro="pendiente">Pendientes</button>
-    <button class="filtro-btn" data-filtro="gestionado">Gestionadas</button>
-    <button class="btn-borrar-todo" id="btn-borrar-todo">Borrar gestionadas</button>
+  <!-- ═══════════ SECCIÓN RESERVAS ═══════════ -->
+  <div class="seccion visible" id="sec-reservas">
+    <div class="stats-bar">
+      <div class="stat-card total"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total reservas</div></div>
+      <div class="stat-card pendiente"><div class="stat-num" id="stat-pendiente">0</div><div class="stat-label">Pendientes</div></div>
+      <div class="stat-card gestionado"><div class="stat-num" id="stat-gestionado">0</div><div class="stat-label">Gestionadas</div></div>
+      <div class="stat-card hoy"><div class="stat-num" id="stat-hoy">0</div><div class="stat-label">Hoy</div></div>
+    </div>
+
+    <div class="filtros-bar">
+      <button class="filtro-btn active" data-filtro="todas">Todas</button>
+      <button class="filtro-btn" data-filtro="pendiente">Pendientes</button>
+      <button class="filtro-btn" data-filtro="gestionado">Gestionadas</button>
+      <button class="btn-borrar-todo" id="btn-borrar-todo">Borrar gestionadas</button>
+    </div>
+
+    <div class="reservas-lista" id="lista-reservas"></div>
   </div>
 
-  <div class="reservas-lista" id="lista"></div>
+  <!-- ═══════════ SECCIÓN CONTACTOS ═══════════ -->
+  <div class="seccion" id="sec-contactos">
+    <div class="stats-bar-con">
+      <div class="stat-card total"><div class="stat-num" id="con-stat-total">0</div><div class="stat-label">Total mensajes</div></div>
+      <div class="stat-card nuevos"><div class="stat-num" id="con-stat-nuevos">0</div><div class="stat-label">Sin leer</div></div>
+      <div class="stat-card gestionado"><div class="stat-num" id="con-stat-leidos">0</div><div class="stat-label">Leídos</div></div>
+    </div>
+
+    <div class="filtros-bar">
+      <button class="filtro-btn active" data-cfiltro="todos">Todos</button>
+      <button class="filtro-btn" data-cfiltro="nuevo">Sin leer</button>
+      <button class="filtro-btn" data-cfiltro="leido">Leídos</button>
+      <button class="btn-borrar-todo" id="btn-borrar-leidos">Borrar leídos</button>
+    </div>
+
+    <div class="reservas-lista" id="lista-contactos"></div>
+  </div>
 </div>
 
 <script type="module">
-  import { initializeApp }            from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc,
+  import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc,
            updateDoc, deleteDoc, query, orderBy, onSnapshot }
-                                       from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+                              from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-  // ── CONFIG FIREBASE ──
   const firebaseConfig = {
     apiKey:            "AIzaSyAk_3_9ELZv6tvO7dPnwIU3XGvqWf5suvQ",
     authDomain:        "tequi-la-la-b7a28.firebaseapp.com",
@@ -286,7 +352,6 @@
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
-  // ── CONTRASEÑA ──
   const PASS = "javi1234";
   const SESSION_KEY = "tql_admin_ok";
 
@@ -332,19 +397,32 @@
     initPanel();
   }
 
+  // ── TABS ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active','azul-tab'));
+      document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+      btn.classList.add('active');
+      if (btn.dataset.tab === 'contactos') btn.classList.add('azul-tab');
+      document.getElementById('sec-' + btn.dataset.tab).classList.add('visible');
+    });
+  });
+
   // ── PANEL ──
   let todasReservas = [];
   let filtroActivo  = 'todas';
+  let todosContactos = [];
+  let filtroContacto = 'todos';
 
   function initPanel() {
-    const q = query(collection(db, 'reservas'), orderBy('fecha', 'desc'));
-    onSnapshot(q, (snap) => {
+    // ── RESERVAS ──
+    const qR = query(collection(db, 'reservas'), orderBy('fecha', 'desc'));
+    onSnapshot(qR, (snap) => {
       todasReservas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       actualizarStats();
-      renderLista();
+      renderReservas();
     });
 
-    // Filtros
     document.querySelectorAll('.filtro-btn[data-filtro]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filtro-btn[data-filtro]').forEach(b => b.classList.remove('active','rojo','verde'));
@@ -352,7 +430,7 @@
         if (btn.dataset.filtro === 'pendiente') btn.classList.add('rojo');
         if (btn.dataset.filtro === 'gestionado') btn.classList.add('verde');
         filtroActivo = btn.dataset.filtro;
-        renderLista();
+        renderReservas();
       });
     });
 
@@ -363,8 +441,34 @@
       for (const r of gestionadas) await deleteDoc(doc(db, 'reservas', r.id));
       mostrarToast(`${gestionadas.length} reservas eliminadas`, 'var(--rojo2)');
     });
+
+    // ── CONTACTOS ──
+    const qC = query(collection(db, 'contactos'), orderBy('fecha', 'desc'));
+    onSnapshot(qC, (snap) => {
+      todosContactos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      actualizarStatsContactos();
+      renderContactos();
+    });
+
+    document.querySelectorAll('.filtro-btn[data-cfiltro]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filtro-btn[data-cfiltro]').forEach(b => b.classList.remove('active','rojo','verde'));
+        btn.classList.add('active');
+        filtroContacto = btn.dataset.cfiltro;
+        renderContactos();
+      });
+    });
+
+    document.getElementById('btn-borrar-leidos').addEventListener('click', async () => {
+      const leidos = todosContactos.filter(c => c.estado === 'leido');
+      if (!leidos.length) { mostrarToast('No hay mensajes leídos', 'var(--gris)'); return; }
+      if (!confirm(`¿Eliminar ${leidos.length} mensajes leídos?`)) return;
+      for (const c of leidos) await deleteDoc(doc(db, 'contactos', c.id));
+      mostrarToast(`${leidos.length} mensajes eliminados`, 'var(--rojo2)');
+    });
   }
 
+  // ── STATS RESERVAS ──
   function actualizarStats() {
     const total      = todasReservas.length;
     const pendientes = todasReservas.filter(r => r.estado !== 'gestionado').length;
@@ -372,8 +476,7 @@
     const hoy        = todasReservas.filter(r => {
       if (!r.fecha) return false;
       const d = r.fecha.toDate ? r.fecha.toDate() : new Date(r.fecha);
-      const n = new Date();
-      return d.toDateString() === n.toDateString();
+      return d.toDateString() === new Date().toDateString();
     }).length;
     document.getElementById('stat-total').textContent      = total;
     document.getElementById('stat-pendiente').textContent  = pendientes;
@@ -382,8 +485,19 @@
     document.getElementById('badge-pendientes').textContent= `${pendientes} pendiente${pendientes !== 1 ? 's' : ''}`;
   }
 
-  function renderLista() {
-    const lista = document.getElementById('lista');
+  // ── STATS CONTACTOS ──
+  function actualizarStatsContactos() {
+    const total  = todosContactos.length;
+    const nuevos = todosContactos.filter(c => c.estado !== 'leido').length;
+    const leidos = todosContactos.filter(c => c.estado === 'leido').length;
+    document.getElementById('con-stat-total').textContent  = total;
+    document.getElementById('con-stat-nuevos').textContent = nuevos;
+    document.getElementById('con-stat-leidos').textContent = leidos;
+  }
+
+  // ── RENDER RESERVAS ──
+  function renderReservas() {
+    const lista = document.getElementById('lista-reservas');
     let datos = filtroActivo === 'todas' ? todasReservas
               : todasReservas.filter(r =>
                   filtroActivo === 'pendiente' ? r.estado !== 'gestionado' : r.estado === 'gestionado'
@@ -420,34 +534,99 @@
         <div class="res-fecha">📅 ${fecha}</div>
         <div class="res-acciones">
           <button class="btn-gestionar ${esGestionado ? 'marcar-pendiente' : 'marcar-gestionado'}"
-            data-id="${r.id}" data-nuevo="${esGestionado ? 'pendiente' : 'gestionado'}">
+            data-id="${r.id}" data-col="reservas" data-nuevo="${esGestionado ? 'pendiente' : 'gestionado'}">
             ${esGestionado ? '↩ Marcar pendiente' : '✓ Marcar gestionado'}
           </button>
-          <button class="btn-eliminar" data-id="${r.id}">🗑 Eliminar</button>
+          <button class="btn-eliminar" data-id="${r.id}" data-col="reservas">🗑 Eliminar</button>
         </div>
       </div>`;
     }).join('');
+    bindAcciones(lista);
+  }
 
-    // Eventos tarjetas
+  // ── RENDER CONTACTOS ──
+  function renderContactos() {
+    const lista = document.getElementById('lista-contactos');
+    let datos = filtroContacto === 'todos' ? todosContactos
+              : todosContactos.filter(c =>
+                  filtroContacto === 'nuevo' ? c.estado !== 'leido' : c.estado === 'leido'
+                );
+    if (!datos.length) {
+      lista.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">✉️</div>
+        <div class="empty-title">Sin mensajes</div>
+        <div class="empty-sub">Los formularios de contacto enviados desde la web aparecerán aquí.</div>
+      </div>`;
+      return;
+    }
+    lista.innerHTML = datos.map(c => {
+      const esLeido = c.estado === 'leido';
+      const fecha = c.fecha
+        ? (c.fecha.toDate ? c.fecha.toDate() : new Date(c.fecha))
+            .toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+        : 'Sin fecha';
+      return `
+      <div class="con-card ${esLeido ? 'leido' : ''}" id="con-card-${c.id}">
+        <div class="con-card-header">
+          <div class="con-nombre">${c.nombre || '—'}</div>
+          <span class="con-estado ${esLeido ? 'leido' : 'nuevo'}">${esLeido ? '✓ Leído' : '● Nuevo'}</span>
+        </div>
+        <div class="res-field">
+          <div class="res-field-label">Discord IC</div>
+          <div class="res-field-val">${c.discord || c.telefono || '—'}</div>
+        </div>
+        <div class="res-field">
+          <div class="res-field-label">Asunto</div>
+          <div class="res-field-val">${c.asunto || '—'}</div>
+        </div>
+        <div class="res-field">
+          <div class="res-field-label">Mensaje</div>
+          <div class="res-field-val">${c.mensaje || '—'}</div>
+        </div>
+        <div class="res-fecha">📅 ${fecha}</div>
+        <div class="res-acciones">
+          <button class="btn-gestionar ${esLeido ? 'marcar-pendiente' : 'marcar-gestionado'}"
+            data-id="${c.id}" data-col="contactos" data-nuevo="${esLeido ? 'nuevo' : 'leido'}">
+            ${esLeido ? '↩ Marcar no leído' : '✓ Marcar como leído'}
+          </button>
+          <button class="btn-eliminar" data-id="${c.id}" data-col="contactos">🗑 Eliminar</button>
+        </div>
+      </div>`;
+    }).join('');
+    bindAcciones(lista);
+  }
+
+  // ── BIND ACCIONES (compartido) ──
+  function bindAcciones(lista) {
     lista.querySelectorAll('.btn-gestionar').forEach(btn => {
       btn.addEventListener('click', async () => {
+        const col = btn.dataset.col;
         const nuevoEstado = btn.dataset.nuevo;
-        await updateDoc(doc(db, 'reservas', btn.dataset.id), { estado: nuevoEstado });
-        mostrarToast(nuevoEstado === 'gestionado' ? '✓ Marcado como gestionado' : '↩ Marcado como pendiente',
-          nuevoEstado === 'gestionado' ? 'var(--verde2)' : 'var(--rojo2)');
+        await updateDoc(doc(db, col, btn.dataset.id), { estado: nuevoEstado });
+        const labels = {
+          gestionado: '✓ Marcado como gestionado',
+          pendiente: '↩ Marcado como pendiente',
+          leido: '✓ Marcado como leído',
+          nuevo: '↩ Marcado como no leído'
+        };
+        const colors = {
+          gestionado: 'var(--verde2)', pendiente: 'var(--rojo2)',
+          leido: 'var(--verde2)', nuevo: 'var(--azul2)'
+        };
+        mostrarToast(labels[nuevoEstado], colors[nuevoEstado]);
       });
     });
     lista.querySelectorAll('.btn-eliminar').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('¿Eliminar esta reserva?')) return;
-        await deleteDoc(doc(db, 'reservas', btn.dataset.id));
-        mostrarToast('Reserva eliminada', 'var(--rojo2)');
+        if (!confirm('¿Eliminar este elemento?')) return;
+        await deleteDoc(doc(db, btn.dataset.col, btn.dataset.id));
+        mostrarToast('Eliminado correctamente', 'var(--rojo2)');
       });
     });
   }
 </script>
 
-<!-- Exponer addDoc/db al formulario principal para que pueda guardar reservas -->
+<!-- Exponer addDoc/db al formulario principal -->
 <script type="module">
   import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
   import { getFirestore, collection, addDoc, Timestamp }
@@ -464,12 +643,15 @@
   const app = initializeApp(firebaseConfig, 'sender');
   const db  = getFirestore(app);
 
-  // Exponer globalmente para que index.html pueda guardar
   window._tqlSaveReserva = async function(data) {
     await addDoc(collection(db, 'reservas'), {
-      ...data,
-      estado: 'pendiente',
-      fecha: Timestamp.now()
+      ...data, estado: 'pendiente', fecha: Timestamp.now()
+    });
+  };
+
+  window._tqlSaveContacto = async function(data) {
+    await addDoc(collection(db, 'contactos'), {
+      ...data, estado: 'nuevo', fecha: Timestamp.now()
     });
   };
 </script>
