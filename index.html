@@ -537,7 +537,6 @@
     <li class="solo-postulacion"><a href="#plantilla">Plantilla</a></li>
     <li class="solo-postulacion"><a href="#direccion">Dirección</a></li>
   </ul>
-  <!-- Botón nav → ancla a #reservas (sin modal) -->
   <a href="#reservas" class="nav-reserva solo-publico">Reservar Espacio</a>
   <a href="#contacto" class="nav-discord solo-postulacion">Discord</a>
 </nav>
@@ -550,7 +549,6 @@
   <div class="hero-sub">Bar · Ring · Sala Privada</div>
   <div class="hero-divider"></div>
   <p class="hero-claim">"Donde la noche, los acuerdos y el combate encuentran su sitio."</p>
-  <!-- Botones hero → anclan a #reservas (sin modal) -->
   <div class="hero-btns solo-publico">
     <a href="#reservas" class="btn-primary">Reservar espacio</a>
     <a href="#menu" class="btn-secondary">Ver menú</a>
@@ -605,6 +603,8 @@
     <h2 class="section-title">NUESTRA <span>CARTA</span></h2>
     <div class="section-divider"></div>
     <p style="color:var(--gris); max-width:680px; font-size:15px; line-height:1.7; margin-bottom:60px;">Bebidas, cócteles y tapas con identidad propia. Calidad y precio justo, siempre.</p>
+
+    <!-- Bebidas Alcohólicas -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🥃 Bebidas Alcohólicas</h3>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
@@ -613,21 +613,29 @@
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/margarita.png" alt="Margarita"/></div><div class="menu-item-info"><div class="menu-item-name">Margarita</div><div class="menu-item-desc">El cóctel de la casa. Sal, limón y tequila en su mejor versión.</div><div class="menu-item-price">60 <span>$</span></div></div></div>
       </div>
     </div>
+
+    <!-- Sin Alcohol — ahora 3 columnas con Coca-Cola -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🫧 Sin Alcohol</h3>
-      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/redbull.png" alt="Energética"/></div><div class="menu-item-info"><div class="menu-item-name">Energética</div><div class="menu-item-desc">Energía pura para las noches más largas del ring y la barra.</div><div class="menu-item-price">15 <span>$</span></div></div></div>
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/tonica.png" alt="Tónica"/></div><div class="menu-item-info"><div class="menu-item-name">Tónica</div><div class="menu-item-desc">Refrescante y elegante. Estilo sin necesidad de alcohol.</div><div class="menu-item-price">10 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/cocacola.png" alt="Coca-Cola"/></div><div class="menu-item-info"><div class="menu-item-name">Coca-Cola</div><div class="menu-item-desc">El clásico de siempre. Fría, con hielo y lista para cualquier momento.</div><div class="menu-item-price">15 <span>$</span></div></div></div>
       </div>
     </div>
+
+    <!-- Para Picar — ahora 2x2 con Nachos -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🍽️ Para Picar</h3>
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;">
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/chipss.png" alt="Patatas Chips"/></div><div class="menu-item-info"><div class="menu-item-name">Patatas Chips</div><div class="menu-item-desc">El clásico de la barra. Con el sello del Tequi-La-La.</div><div class="menu-item-price">30 <span>$</span></div></div></div>
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/ensaladilla.png" alt="Ensaladilla Rusa"/></div><div class="menu-item-info"><div class="menu-item-name">Ensaladilla Rusa</div><div class="menu-item-desc">Casera y contundente. Perfecta para acompañar cualquier velada.</div><div class="menu-item-price">35 <span>$</span></div></div></div>
         <div class="menu-item-card"><div class="menu-item-img"><img src="img/tortilla.png" alt="Pincho de Tortilla"/></div><div class="menu-item-info"><div class="menu-item-name">Pincho de Tortilla</div><div class="menu-item-desc">Jugoso y bien cuajado. El rey de los pinchos de la casa.</div><div class="menu-item-price">35 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/nachos.png" alt="Nachos con Salsa"/></div><div class="menu-item-info"><div class="menu-item-name">Nachos con Salsa</div><div class="menu-item-desc">Crujientes y bien cargados. Queso fundido, salsa picante y guacamole.</div><div class="menu-item-price">35 <span>$</span></div></div></div>
       </div>
     </div>
+
+    <!-- Packs -->
     <div>
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">📦 Packs Sin Alcohol</h3>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
