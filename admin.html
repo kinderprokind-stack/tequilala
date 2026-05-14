@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Tequi-La-La</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --negro: #0a0a0a; --negro2: #111111; --negro3: #1a1a1a;
+      --rojo: #c0392b; --rojo2: #e74c3c;
+      --dorado: #c9a34e; --dorado2: #e8c47a;
+      --verde: #27ae60; --verde2: #2ecc71;
+      --blanco: #f5efe6; --gris: #888880;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--negro); color:var(--blanco); font-family:'Inter',sans-serif; min-height:100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      position:fixed; inset:0; background:var(--negro);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; flex-direction:column; gap:0;
+    }
+    #login-screen.hidden { display:none; }
+    .login-box {
+      background:var(--negro2); border:1px solid rgba(201,163,78,0.3);
+      border-radius:4px; padding:52px 48px; width:100%; max-width:420px;
+      position:relative; overflow:hidden;
+    }
+    .login-box::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(to right, var(--rojo), var(--dorado));
+    }
+    .login-logo { text-align:center; margin-bottom:32px; }
+    .login-logo img { height:72px; object-fit:contain; }
+    .login-title { font-family:'Bebas Neue'; font-size:36px; color:var(--dorado); letter-spacing:2px; text-align:center; margin-bottom:6px; }
+    .login-sub { font-size:12px; color:var(--gris); text-align:center; letter-spacing:2px; text-transform:uppercase; margin-bottom:32px; }
+    .login-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--dorado); display:block; margin-bottom:8px; }
+    .login-input {
+      width:100%; background:var(--negro3); border:1px solid rgba(255,255,255,0.1);
+      border-radius:3px; padding:14px 16px; color:var(--blanco);
+      font-family:'Inter',sans-serif; font-size:15px; outline:none;
+      transition:border-color 0.25s; letter-spacing:2px;
+    }
+    .login-input:focus { border-color:var(--dorado); }
+    .login-btn {
+      width:100%; margin-top:20px; background:var(--rojo); color:white; border:none;
+      padding:15px; border-radius:4px; font-size:13px; font-weight:700;
+      letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+      transition:background 0.3s, transform 0.2s;
+    }
+    .login-btn:hover { background:var(--rojo2); transform:translateY(-1px); }
+    .login-error {
+      background:rgba(192,57,43,0.15); border:1px solid rgba(192,57,43,0.4);
+      color:var(--rojo2); font-size:13px; padding:12px 16px; border-radius:3px;
+      margin-top:16px; display:none; text-align:center;
+    }
+    .login-back { margin-top:20px; text-align:center; }
+    .login-back a { color:var(--gris); font-size:12px; text-decoration:none; letter-spacing:1px; transition:color 0.2s; }
+    .login-back a:hover { color:var(--dorado); }
+
+    /* ── PANEL ── */
+    #panel { display:none; }
+    #panel.visible { display:block; }
+
+    /* NAV ADMIN */
+    .admin-nav {
+      position:sticky; top:0; z-index:100;
+      background:rgba(10,10,10,0.97); backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(201,163,78,0.2);
+      padding:0 40px; display:flex; align-items:center; justify-content:space-between; height:70px;
+    }
+    .admin-nav-left { display:flex; align-items:center; gap:14px; }
+    .admin-nav-left img { height:42px; object-fit:contain; }
+    .admin-nav-title { font-family:'Bebas Neue'; font-size:22px; color:var(--dorado); letter-spacing:2px; }
+    .admin-nav-badge {
+      background:var(--rojo); color:white; font-size:11px; font-weight:700;
+      padding:3px 10px; border-radius:20px; letter-spacing:1px;
+    }
+    .admin-nav-right { display:flex; align-items:center; gap:16px; }
+    .btn-logout {
+      background:transparent; border:1px solid rgba(255,255,255,0.15);
+      color:var(--gris); padding:8px 18px; border-radius:4px; font-size:12px;
+      font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer;
+      transition:border-color 0.2s, color 0.2s;
+    }
+    .btn-logout:hover { border-color:var(--rojo); color:var(--rojo); }
+    .btn-volver {
+      background:var(--negro3); border:1px solid rgba(201,163,78,0.3);
+      color:var(--dorado); padding:8px 18px; border-radius:4px; font-size:12px;
+      font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer;
+      text-decoration:none; transition:background 0.2s;
+    }
+    .btn-volver:hover { background:rgba(201,163,78,0.1); }
+
+    /* STATS */
+    .stats-bar {
+      max-width:1200px; margin:40px auto 0; padding:0 40px;
+      display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+    }
+    .stat-card {
+      background:var(--negro2); border:1px solid rgba(255,255,255,0.06);
+      border-radius:2px; padding:24px 28px; position:relative; overflow:hidden;
+    }
+    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .stat-card.total::before { background:linear-gradient(to right, var(--dorado), var(--dorado2)); }
+    .stat-card.pendiente::before { background:linear-gradient(to right, var(--rojo), var(--rojo2)); }
+    .stat-card.gestionado::before { background:linear-gradient(to right, var(--verde), var(--verde2)); }
+    .stat-card.hoy::before { background:linear-gradient(to right, #5865F2, #7289da); }
+    .stat-num { font-family:'Bebas Neue'; font-size:52px; line-height:1; color:var(--blanco); }
+    .stat-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gris); margin-top:6px; }
+
+    /* FILTROS */
+    .filtros-bar {
+      max-width:1200px; margin:32px auto 0; padding:0 40px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .filtro-btn {
+      background:var(--negro3); border:1px solid rgba(255,255,255,0.08);
+      color:var(--gris); padding:8px 20px; border-radius:20px; font-size:12px;
+      font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+      transition:all 0.2s;
+    }
+    .filtro-btn:hover { border-color:rgba(201,163,78,0.4); color:var(--dorado); }
+    .filtro-btn.active { background:rgba(201,163,78,0.12); border-color:var(--dorado); color:var(--dorado); }
+    .filtro-btn.active.rojo { background:rgba(192,57,43,0.12); border-color:var(--rojo); color:var(--rojo2); }
+    .filtro-btn.active.verde { background:rgba(39,174,96,0.12); border-color:var(--verde); color:var(--verde2); }
+    .btn-borrar-todo {
+      margin-left:auto; background:transparent; border:1px solid rgba(192,57,43,0.3);
+      color:rgba(192,57,43,0.6); padding:8px 20px; border-radius:20px; font-size:12px;
+      font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+      transition:all 0.2s;
+    }
+    .btn-borrar-todo:hover { border-color:var(--rojo); color:var(--rojo2); }
+
+    /* LISTA RESERVAS */
+    .reservas-lista {
+      max-width:1200px; margin:32px auto 60px; padding:0 40px;
+      display:grid; grid-template-columns:repeat(2,1fr); gap:20px;
+    }
+
+    /* TARJETA */
+    .res-card {
+      background:var(--negro2); border:1px solid rgba(255,255,255,0.06);
+      border-radius:2px; padding:28px; position:relative; overflow:hidden;
+      transition:border-color 0.3s, transform 0.2s;
+    }
+    .res-card:hover { transform:translateY(-2px); border-color:rgba(201,163,78,0.2); }
+    .res-card.pendiente { border-left:3px solid var(--rojo); }
+    .res-card.gestionado { border-left:3px solid var(--verde); }
+    .res-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+    .res-nombre { font-family:'Bebas Neue'; font-size:26px; color:var(--blanco); letter-spacing:1px; }
+    .res-estado {
+      font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+      padding:4px 12px; border-radius:20px; flex-shrink:0;
+    }
+    .res-estado.pendiente { background:rgba(192,57,43,0.15); border:1px solid rgba(192,57,43,0.4); color:var(--rojo2); }
+    .res-estado.gestionado { background:rgba(39,174,96,0.15); border:1px solid rgba(39,174,96,0.4); color:var(--verde2); }
+    .res-espacio {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(201,163,78,0.08); border:1px solid rgba(201,163,78,0.2);
+      color:var(--dorado); font-size:12px; font-weight:600; letter-spacing:1px;
+      padding:5px 12px; border-radius:20px; margin-bottom:16px;
+    }
+    .res-field { margin-bottom:12px; }
+    .res-field-label { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--dorado); margin-bottom:4px; }
+    .res-field-val { font-size:14px; color:#ccc; line-height:1.6; }
+    .res-fecha { font-size:11px; color:var(--gris); margin-top:16px; letter-spacing:1px; }
+    .res-acciones { display:flex; gap:10px; margin-top:20px; }
+    .btn-gestionar {
+      flex:1; padding:10px; border-radius:3px; font-size:11px; font-weight:700;
+      letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+    }
+    .btn-gestionar.marcar-gestionado { background:rgba(39,174,96,0.1); border:1px solid rgba(39,174,96,0.4); color:var(--verde2); }
+    .btn-gestionar.marcar-gestionado:hover { background:var(--verde); color:white; border-color:var(--verde); }
+    .btn-gestionar.marcar-pendiente { background:rgba(192,57,43,0.1); border:1px solid rgba(192,57,43,0.3); color:var(--rojo2); }
+    .btn-gestionar.marcar-pendiente:hover { background:var(--rojo); color:white; border-color:var(--rojo); }
+    .btn-eliminar {
+      padding:10px 16px; border-radius:3px; font-size:11px; font-weight:700;
+      letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+      background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--gris);
+      transition:all 0.2s;
+    }
+    .btn-eliminar:hover { border-color:var(--rojo); color:var(--rojo); }
+
+    /* VACÍO */
+    .empty-state {
+      grid-column:1/-1; text-align:center; padding:80px 20px;
+      background:var(--negro2); border:1px solid rgba(255,255,255,0.04); border-radius:2px;
+    }
+    .empty-icon { font-size:52px; margin-bottom:20px; }
+    .empty-title { font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; margin-bottom:10px; }
+    .empty-sub { font-size:14px; color:var(--gris); line-height:1.7; }
+
+    /* LOADING */
+    .loading-state {
+      grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--gris);
+      font-size:13px; letter-spacing:3px; text-transform:uppercase;
+    }
+
+    /* TOAST */
+    #toast {
+      position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px);
+      background:var(--negro3); border:1px solid var(--dorado);
+      color:var(--dorado); font-size:13px; font-weight:600; letter-spacing:2px;
+      padding:12px 28px; border-radius:40px; z-index:9999;
+      transition:transform 0.4s ease, opacity 0.4s ease; opacity:0;
+      pointer-events:none;
+    }
+    #toast.visible { transform:translateX(-50%) translateY(0); opacity:1; }
+
+    @media(max-width:900px) {
+      .stats-bar { grid-template-columns:1fr 1fr; padding:0 20px; }
+      .reservas-lista { grid-template-columns:1fr; padding:0 20px; }
+      .filtros-bar { padding:0 20px; }
+      .admin-nav { padding:0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><img src="img/logo.jpg" alt="Tequi-La-La"/></div>
+    <div class="login-title">Panel de Admin</div>
+    <div class="login-sub">Tequi-La-La · Acceso restringido</div>
+    <label class="login-label" for="pass-input">Contraseña</label>
+    <input class="login-input" type="password" id="pass-input" placeholder="••••••••" autocomplete="current-password"/>
+    <div class="login-error" id="login-error">Contraseña incorrecta. Inténtalo de nuevo.</div>
+    <button class="login-btn" id="login-btn">Entrar</button>
+    <div class="login-back"><a href="index.html">← Volver a la web</a></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ── PANEL ── -->
+<div id="panel">
+  <nav class="admin-nav">
+    <div class="admin-nav-left">
+      <img src="img/logo.jpg" alt="Tequi-La-La"/>
+      <span class="admin-nav-title">Panel Admin</span>
+      <span class="admin-nav-badge" id="badge-pendientes">0 pendientes</span>
+    </div>
+    <div class="admin-nav-right">
+      <a href="index.html" class="btn-volver">← Ver web</a>
+      <button class="btn-logout" id="btn-logout">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="stats-bar">
+    <div class="stat-card total"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total reservas</div></div>
+    <div class="stat-card pendiente"><div class="stat-num" id="stat-pendiente">0</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-card gestionado"><div class="stat-num" id="stat-gestionado">0</div><div class="stat-label">Gestionadas</div></div>
+    <div class="stat-card hoy"><div class="stat-num" id="stat-hoy">0</div><div class="stat-label">Hoy</div></div>
+  </div>
+
+  <div class="filtros-bar">
+    <button class="filtro-btn active" data-filtro="todas">Todas</button>
+    <button class="filtro-btn" data-filtro="pendiente">Pendientes</button>
+    <button class="filtro-btn" data-filtro="gestionado">Gestionadas</button>
+    <button class="btn-borrar-todo" id="btn-borrar-todo">Borrar gestionadas</button>
+  </div>
+
+  <div class="reservas-lista" id="lista"></div>
+</div>
+
+<script type="module">
+  import { initializeApp }            from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, doc,
+           updateDoc, deleteDoc, query, orderBy, onSnapshot }
+                                       from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+  // ── CONFIG FIREBASE ──
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAk_3_9ELZv6tvO7dPnwIU3XGvqWf5suvQ",
+    authDomain:        "tequi-la-la-b7a28.firebaseapp.com",
+    projectId:         "tequi-la-la-b7a28",
+    storageBucket:     "tequi-la-la-b7a28.firebasestorage.app",
+    messagingSenderId: "553621899770",
+    appId:             "1:553621899770:web:6e94dfc0d47a182707bc43"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  // ── CONTRASEÑA ──
+  const PASS = "javi1234";
+  const SESSION_KEY = "tql_admin_ok";
+
+  const loginScreen = document.getElementById('login-screen');
+  const panel       = document.getElementById('panel');
+  const passInput   = document.getElementById('pass-input');
+  const loginBtn    = document.getElementById('login-btn');
+  const loginError  = document.getElementById('login-error');
+  const toast       = document.getElementById('toast');
+
+  function mostrarToast(msg, color) {
+    toast.textContent = msg;
+    toast.style.borderColor = color || 'var(--dorado)';
+    toast.style.color = color || 'var(--dorado)';
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 2800);
+  }
+
+  function entrar() {
+    if (passInput.value === PASS) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      loginScreen.classList.add('hidden');
+      panel.classList.add('visible');
+      loginError.style.display = 'none';
+      initPanel();
+    } else {
+      loginError.style.display = 'block';
+      passInput.value = '';
+      passInput.focus();
+    }
+  }
+
+  loginBtn.addEventListener('click', entrar);
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    loginScreen.classList.add('hidden');
+    panel.classList.add('visible');
+    initPanel();
+  }
+
+  // ── PANEL ──
+  let todasReservas = [];
+  let filtroActivo  = 'todas';
+
+  function initPanel() {
+    const q = query(collection(db, 'reservas'), orderBy('fecha', 'desc'));
+    onSnapshot(q, (snap) => {
+      todasReservas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      actualizarStats();
+      renderLista();
+    });
+
+    // Filtros
+    document.querySelectorAll('.filtro-btn[data-filtro]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filtro-btn[data-filtro]').forEach(b => b.classList.remove('active','rojo','verde'));
+        btn.classList.add('active');
+        if (btn.dataset.filtro === 'pendiente') btn.classList.add('rojo');
+        if (btn.dataset.filtro === 'gestionado') btn.classList.add('verde');
+        filtroActivo = btn.dataset.filtro;
+        renderLista();
+      });
+    });
+
+    document.getElementById('btn-borrar-todo').addEventListener('click', async () => {
+      const gestionadas = todasReservas.filter(r => r.estado === 'gestionado');
+      if (!gestionadas.length) { mostrarToast('No hay reservas gestionadas', 'var(--gris)'); return; }
+      if (!confirm(`¿Eliminar ${gestionadas.length} reservas gestionadas?`)) return;
+      for (const r of gestionadas) await deleteDoc(doc(db, 'reservas', r.id));
+      mostrarToast(`${gestionadas.length} reservas eliminadas`, 'var(--rojo2)');
+    });
+  }
+
+  function actualizarStats() {
+    const total      = todasReservas.length;
+    const pendientes = todasReservas.filter(r => r.estado !== 'gestionado').length;
+    const gestionadas= todasReservas.filter(r => r.estado === 'gestionado').length;
+    const hoy        = todasReservas.filter(r => {
+      if (!r.fecha) return false;
+      const d = r.fecha.toDate ? r.fecha.toDate() : new Date(r.fecha);
+      const n = new Date();
+      return d.toDateString() === n.toDateString();
+    }).length;
+    document.getElementById('stat-total').textContent      = total;
+    document.getElementById('stat-pendiente').textContent  = pendientes;
+    document.getElementById('stat-gestionado').textContent = gestionadas;
+    document.getElementById('stat-hoy').textContent        = hoy;
+    document.getElementById('badge-pendientes').textContent= `${pendientes} pendiente${pendientes !== 1 ? 's' : ''}`;
+  }
+
+  function renderLista() {
+    const lista = document.getElementById('lista');
+    let datos = filtroActivo === 'todas' ? todasReservas
+              : todasReservas.filter(r =>
+                  filtroActivo === 'pendiente' ? r.estado !== 'gestionado' : r.estado === 'gestionado'
+                );
+    if (!datos.length) {
+      lista.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">🥊</div>
+        <div class="empty-title">Sin reservas</div>
+        <div class="empty-sub">Cuando alguien envíe una solicitud desde la web, aparecerá aquí al instante.</div>
+      </div>`;
+      return;
+    }
+    lista.innerHTML = datos.map(r => {
+      const esGestionado = r.estado === 'gestionado';
+      const fecha = r.fecha
+        ? (r.fecha.toDate ? r.fecha.toDate() : new Date(r.fecha))
+            .toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+        : 'Sin fecha';
+      return `
+      <div class="res-card ${esGestionado ? 'gestionado' : 'pendiente'}" id="card-${r.id}">
+        <div class="res-card-header">
+          <div class="res-nombre">${r.nombre || '—'}</div>
+          <span class="res-estado ${esGestionado ? 'gestionado' : 'pendiente'}">${esGestionado ? '✓ Gestionado' : '● Pendiente'}</span>
+        </div>
+        <div class="res-espacio">🏠 ${r.espacio || '—'}</div>
+        <div class="res-field">
+          <div class="res-field-label">Teléfono IC</div>
+          <div class="res-field-val">${r.telefono || '—'}</div>
+        </div>
+        <div class="res-field">
+          <div class="res-field-label">Motivo de la reserva</div>
+          <div class="res-field-val">${r.motivo || '—'}</div>
+        </div>
+        <div class="res-fecha">📅 ${fecha}</div>
+        <div class="res-acciones">
+          <button class="btn-gestionar ${esGestionado ? 'marcar-pendiente' : 'marcar-gestionado'}"
+            data-id="${r.id}" data-nuevo="${esGestionado ? 'pendiente' : 'gestionado'}">
+            ${esGestionado ? '↩ Marcar pendiente' : '✓ Marcar gestionado'}
+          </button>
+          <button class="btn-eliminar" data-id="${r.id}">🗑 Eliminar</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Eventos tarjetas
+    lista.querySelectorAll('.btn-gestionar').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const nuevoEstado = btn.dataset.nuevo;
+        await updateDoc(doc(db, 'reservas', btn.dataset.id), { estado: nuevoEstado });
+        mostrarToast(nuevoEstado === 'gestionado' ? '✓ Marcado como gestionado' : '↩ Marcado como pendiente',
+          nuevoEstado === 'gestionado' ? 'var(--verde2)' : 'var(--rojo2)');
+      });
+    });
+    lista.querySelectorAll('.btn-eliminar').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('¿Eliminar esta reserva?')) return;
+        await deleteDoc(doc(db, 'reservas', btn.dataset.id));
+        mostrarToast('Reserva eliminada', 'var(--rojo2)');
+      });
+    });
+  }
+</script>
+
+<!-- Exponer addDoc/db al formulario principal para que pueda guardar reservas -->
+<script type="module">
+  import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, Timestamp }
+                              from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAk_3_9ELZv6tvO7dPnwIU3XGvqWf5suvQ",
+    authDomain:        "tequi-la-la-b7a28.firebaseapp.com",
+    projectId:         "tequi-la-la-b7a28",
+    storageBucket:     "tequi-la-la-b7a28.firebasestorage.app",
+    messagingSenderId: "553621899770",
+    appId:             "1:553621899770:web:6e94dfc0d47a182707bc43"
+  };
+  const app = initializeApp(firebaseConfig, 'sender');
+  const db  = getFirestore(app);
+
+  // Exponer globalmente para que index.html pueda guardar
+  window._tqlSaveReserva = async function(data) {
+    await addDoc(collection(db, 'reservas'), {
+      ...data,
+      estado: 'pendiente',
+      fecha: Timestamp.now()
+    });
+  };
+</script>
+
+</body>
+</html>
