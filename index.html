@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tequi-La-La — Postulación Oficial</title>
+  <title>Tequi-La-La</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -25,6 +25,21 @@
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
     }
+
+    /* ── MODO DUAL ── */
+    .solo-postulacion { display: none !important; }
+    body.modo-postulacion .solo-postulacion { display: block !important; }
+    body.modo-postulacion .solo-publico { display: none !important; }
+    /* toast de activación */
+    #modo-toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--negro3); border: 1px solid var(--dorado);
+      color: var(--dorado); font-size: 13px; font-weight: 600; letter-spacing: 2px;
+      padding: 12px 28px; border-radius: 40px; z-index: 9999;
+      transition: transform 0.4s ease, opacity 0.4s ease; opacity: 0;
+    }
+    #modo-toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+
     nav {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
       background: rgba(10,10,10,0.95);
@@ -34,21 +49,22 @@
       display: flex; align-items: center; justify-content: space-between;
       height: 70px;
     }
-    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer; user-select: none;
+    }
     .nav-logo img { height: 46px; object-fit: contain; }
     .nav-logo span { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--dorado); letter-spacing: 2px; }
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a {
       color: var(--gris); text-decoration: none; font-size: 13px; font-weight: 500;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      transition: color 0.3s;
+      letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s;
     }
     .nav-links a:hover { color: var(--dorado); }
     .nav-discord {
       background: #5865F2; color: white; padding: 10px 20px;
       border-radius: 6px; font-size: 13px; font-weight: 600;
-      text-decoration: none; letter-spacing: 1px;
-      transition: background 0.3s;
+      text-decoration: none; letter-spacing: 1px; transition: background 0.3s;
     }
     .nav-discord:hover { background: #4752c4; }
     .hero {
@@ -76,8 +92,7 @@
     .hero h1 span { color: var(--dorado); }
     .hero-sub {
       font-size: clamp(13px, 2vw, 17px); color: var(--gris);
-      margin-top: 20px; letter-spacing: 3px; text-transform: uppercase;
-      font-weight: 300;
+      margin-top: 20px; letter-spacing: 3px; text-transform: uppercase; font-weight: 300;
     }
     .hero-divider {
       width: 80px; height: 2px;
@@ -86,51 +101,27 @@
     }
     .hero-claim {
       font-size: clamp(16px, 2.5vw, 22px); color: var(--blanco);
-      font-style: italic; font-weight: 300; max-width: 600px;
-      line-height: 1.6;
+      font-style: italic; font-weight: 300; max-width: 600px; line-height: 1.6;
     }
     .hero-scroll {
       position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
       color: var(--dorado); font-size: 12px; letter-spacing: 3px;
       text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px;
     }
-    .hero-scroll::after {
-      content: ''; width: 1px; height: 40px; background: var(--dorado); opacity: 0.5;
-    }
+    .hero-scroll::after { content: ''; width: 1px; height: 40px; background: var(--dorado); opacity: 0.5; }
     section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
     .section-full { max-width: 100%; padding: 100px 0; }
-    .section-tag {
-      font-size: 11px; font-weight: 700; letter-spacing: 4px;
-      text-transform: uppercase; color: var(--dorado); margin-bottom: 12px;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(40px, 6vw, 72px); line-height: 1;
-      color: var(--blanco); margin-bottom: 16px;
-    }
+    .section-tag { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--dorado); margin-bottom: 12px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 6vw, 72px); line-height: 1; color: var(--blanco); margin-bottom: 16px; }
     .section-title span { color: var(--dorado); }
-    .section-divider {
-      width: 60px; height: 2px;
-      background: linear-gradient(to right, var(--rojo), var(--dorado));
-      margin-bottom: 40px;
-    }
-    .concepto-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-      align-items: center;
-    }
+    .section-divider { width: 60px; height: 2px; background: linear-gradient(to right, var(--rojo), var(--dorado)); margin-bottom: 40px; }
+    .concepto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
     .concepto-img { border-radius: 2px; overflow: hidden; position: relative; }
     .concepto-img img { width: 100%; height: 500px; object-fit: cover; display: block; }
-    .concepto-img::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(192,57,43,0.2), transparent);
-      z-index: 1;
-    }
+    .concepto-img::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(192,57,43,0.2), transparent); z-index: 1; }
     .concepto-text p { font-size: 16px; line-height: 1.8; color: #ccc; margin-bottom: 20px; }
     .concepto-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
-    .pillar {
-      background: var(--negro3); border: 1px solid rgba(201,163,78,0.15);
-      padding: 20px; border-radius: 2px; border-left: 3px solid var(--dorado);
-    }
+    .pillar { background: var(--negro3); border: 1px solid rgba(201,163,78,0.15); padding: 20px; border-radius: 2px; border-left: 3px solid var(--dorado); }
     .pillar-title { font-family: 'Bebas Neue'; font-size: 18px; color: var(--dorado); margin-bottom: 6px; }
     .pillar p { font-size: 13px; color: var(--gris); line-height: 1.6; }
     .zonas-bg { background: var(--negro2); padding: 100px 0; }
@@ -139,11 +130,7 @@
     .zona-card { position: relative; overflow: hidden; cursor: pointer; }
     .zona-card img { width: 100%; height: 380px; object-fit: cover; display: block; transition: transform 0.6s; }
     .zona-card:hover img { transform: scale(1.05); }
-    .zona-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
-      display: flex; flex-direction: column; justify-content: flex-end; padding: 28px;
-    }
+    .zona-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; }
     .zona-num { font-family: 'Bebas Neue'; font-size: 48px; color: rgba(201,163,78,0.3); line-height: 1; }
     .zona-name { font-family: 'Bebas Neue'; font-size: 28px; color: white; letter-spacing: 2px; }
     .zona-desc { font-size: 13px; color: var(--gris); margin-top: 6px; line-height: 1.5; }
@@ -151,15 +138,8 @@
     .eventos-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
     .eventos-split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; margin-top: 60px; }
     .evento-tipo { margin-bottom: 40px; }
-    .evento-tipo-title {
-      font-family: 'Bebas Neue'; font-size: 28px; color: var(--dorado);
-      letter-spacing: 2px; border-bottom: 1px solid rgba(201,163,78,0.2);
-      padding-bottom: 12px; margin-bottom: 20px;
-    }
-    .evento-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
+    .evento-tipo-title { font-family: 'Bebas Neue'; font-size: 28px; color: var(--dorado); letter-spacing: 2px; border-bottom: 1px solid rgba(201,163,78,0.2); padding-bottom: 12px; margin-bottom: 20px; }
+    .evento-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .evento-dot { width: 6px; height: 6px; background: var(--rojo); border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
     .evento-item-text { font-size: 14px; color: #ccc; line-height: 1.5; }
     .evento-item-text strong { color: var(--blanco); display: block; }
@@ -176,10 +156,7 @@
     .gestion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 60px; }
     .gestion-img img { width: 100%; height: 420px; object-fit: cover; border-radius: 2px; }
     .gestion-list { list-style: none; }
-    .gestion-list li {
-      padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex; align-items: flex-start; gap: 14px;
-    }
+    .gestion-list li { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: flex-start; gap: 14px; }
     .gestion-list li:last-child { border-bottom: none; }
     .gestion-num { font-family: 'Bebas Neue'; font-size: 28px; color: var(--rojo); opacity: 0.5; line-height: 1; flex-shrink: 0; width: 30px; }
     .gestion-text strong { display: block; color: var(--blanco); font-size: 15px; margin-bottom: 4px; }
@@ -187,20 +164,12 @@
     .plantilla-bg { background: var(--negro2); padding: 100px 0; }
     .plantilla-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
     .rangos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 60px; }
-    .rango-card {
-      background: var(--negro3); border: 1px solid rgba(255,255,255,0.06);
-      padding: 28px 16px; text-align: center; border-radius: 2px;
-      transition: border-color 0.3s;
-    }
+    .rango-card { background: var(--negro3); border: 1px solid rgba(255,255,255,0.06); padding: 28px 16px; text-align: center; border-radius: 2px; transition: border-color 0.3s; }
     .rango-card.jefe { border-color: var(--dorado); }
     .rango-card:hover { border-color: rgba(201,163,78,0.5); }
     .rango-icon { font-size: 32px; margin-bottom: 12px; }
     .rango-name { font-family: 'Bebas Neue'; font-size: 20px; color: var(--dorado); letter-spacing: 1px; }
-    .rango-badge {
-      display: inline-block; margin-top: 10px; padding: 3px 10px;
-      font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      border-radius: 20px;
-    }
+    .rango-badge { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 20px; }
     .badge-jefe { background: rgba(201,163,78,0.2); color: var(--dorado); border: 1px solid var(--dorado); }
     .badge-prueba { background: rgba(192,57,43,0.15); color: var(--rojo2); border: 1px solid rgba(192,57,43,0.4); }
     .rango-desc { font-size: 12px; color: var(--gris); margin-top: 8px; line-height: 1.5; }
@@ -209,10 +178,7 @@
     .uniformes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 60px; }
     .uniformes-img img { width: 100%; height: 500px; object-fit: cover; border-radius: 2px; }
     .uniformes-specs { display: flex; flex-direction: column; gap: 20px; }
-    .uniform-spec {
-      background: var(--negro3); border: 1px solid rgba(201,163,78,0.1);
-      padding: 20px 24px; border-radius: 2px; border-left: 3px solid var(--rojo);
-    }
+    .uniform-spec { background: var(--negro3); border: 1px solid rgba(201,163,78,0.1); padding: 20px 24px; border-radius: 2px; border-left: 3px solid var(--rojo); }
     .uniform-spec.gold { border-left-color: var(--dorado); }
     .uniform-spec-rank { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 6px; }
     .uniform-spec-desc { font-size: 14px; color: #ccc; line-height: 1.6; }
@@ -221,10 +187,7 @@
     .convenios-bg { background: var(--negro); padding: 100px 0; }
     .convenios-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
     .convenios-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 60px; }
-    .convenio-card {
-      background: var(--negro3); border: 1px solid rgba(255,255,255,0.06);
-      padding: 28px; border-radius: 2px; transition: border-color 0.3s, transform 0.3s;
-    }
+    .convenio-card { background: var(--negro3); border: 1px solid rgba(255,255,255,0.06); padding: 28px; border-radius: 2px; transition: border-color 0.3s, transform 0.3s; }
     .convenio-card:hover { border-color: var(--dorado); transform: translateY(-4px); }
     .convenio-icon { font-size: 36px; margin-bottom: 14px; }
     .convenio-name { font-family: 'Bebas Neue'; font-size: 20px; color: var(--dorado); letter-spacing: 1px; margin-bottom: 8px; }
@@ -232,29 +195,16 @@
     .direccion-bg { background: linear-gradient(135deg, var(--negro2) 0%, #1a0a0a 100%); padding: 100px 0; }
     .direccion-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
     .direccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; }
-    .direccion-card {
-      background: rgba(0,0,0,0.4); border: 1px solid rgba(201,163,78,0.25);
-      padding: 40px; border-radius: 2px; position: relative; overflow: hidden;
-    }
-    .direccion-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(to right, var(--rojo), var(--dorado));
-    }
+    .direccion-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(201,163,78,0.25); padding: 40px; border-radius: 2px; position: relative; overflow: hidden; }
+    .direccion-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--rojo), var(--dorado)); }
     .dir-role { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--dorado); margin-bottom: 12px; }
     .dir-name { font-family: 'Bebas Neue'; font-size: 42px; color: var(--blanco); line-height: 1; margin-bottom: 16px; }
-    .dir-discord {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(88,101,242,0.15); border: 1px solid rgba(88,101,242,0.4);
-      color: #7289da; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600;
-    }
+    .dir-discord { display: inline-flex; align-items: center; gap: 8px; background: rgba(88,101,242,0.15); border: 1px solid rgba(88,101,242,0.4); color: #7289da; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; }
     .dir-texto { font-size: 14px; color: var(--gris); line-height: 1.8; margin-top: 20px; }
     .motivos-bg { background: var(--negro2); padding: 100px 0; }
     .motivos-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
     .motivos-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 60px; }
-    .motivo-card {
-      background: var(--negro3); padding: 32px 24px; border-radius: 2px;
-      border-bottom: 3px solid transparent; transition: border-color 0.3s;
-    }
+    .motivo-card { background: var(--negro3); padding: 32px 24px; border-radius: 2px; border-bottom: 3px solid transparent; transition: border-color 0.3s; }
     .motivo-card:hover { border-bottom-color: var(--dorado); }
     .motivo-num { font-family: 'Bebas Neue'; font-size: 56px; color: rgba(201,163,78,0.15); line-height: 1; }
     .motivo-title { font-family: 'Bebas Neue'; font-size: 22px; color: var(--dorado); margin: 8px 0; letter-spacing: 1px; }
@@ -263,23 +213,14 @@
     .cierre img { height: 100px; object-fit: contain; margin-bottom: 30px; }
     .cierre-title { font-family: 'Bebas Neue'; font-size: clamp(36px, 6vw, 64px); color: var(--blanco); margin-bottom: 16px; }
     .cierre-sub { font-size: 16px; color: var(--gris); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
-    .btn-discord {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: #5865F2; color: white; padding: 16px 36px;
-      border-radius: 6px; font-size: 15px; font-weight: 700;
-      text-decoration: none; letter-spacing: 1px; text-transform: uppercase;
-      transition: background 0.3s, transform 0.2s;
-    }
+    .btn-discord { display: inline-flex; align-items: center; gap: 12px; background: #5865F2; color: white; padding: 16px 36px; border-radius: 6px; font-size: 15px; font-weight: 700; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: background 0.3s, transform 0.2s; }
     .btn-discord:hover { background: #4752c4; transform: translateY(-2px); }
     .btn-discord svg { width: 22px; height: 22px; fill: white; }
     .cierre-firma { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 12px; color: rgba(255,255,255,0.2); letter-spacing: 2px; text-transform: uppercase; }
     footer { background: #050505; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.04); }
     footer .f-logo { font-family: 'Bebas Neue'; font-size: 18px; color: rgba(201,163,78,0.4); letter-spacing: 2px; }
     footer .f-text { font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 1px; }
-    .menu-item-card {
-      background: var(--negro3); border: 1px solid rgba(201,163,78,0.1); border-radius: 2px; overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s;
-    }
+    .menu-item-card { background: var(--negro3); border: 1px solid rgba(201,163,78,0.1); border-radius: 2px; overflow: hidden; transition: border-color 0.3s, transform 0.3s; }
     .menu-item-card:hover { border-color: var(--dorado); transform: translateY(-4px); }
     .menu-item-img { background: #111; display: flex; align-items: center; justify-content: center; height: 220px; padding: 20px; }
     .menu-item-img img { max-height: 180px; max-width: 100%; object-fit: contain; }
@@ -288,20 +229,12 @@
     .menu-item-desc { font-size: 12px; color: var(--gris); margin-top: 4px; line-height: 1.5; }
     .menu-item-price { font-family: 'Bebas Neue'; font-size: 28px; color: var(--blanco); margin-top: 12px; }
     .menu-item-price span { font-size: 16px; color: var(--gris); }
-    .pack-card {
-      background: var(--negro3); border: 1px solid rgba(201,163,78,0.3); border-radius: 2px;
-      overflow: hidden; position: relative; transition: border-color 0.3s, transform 0.3s;
-    }
+    .pack-card { background: var(--negro3); border: 1px solid rgba(201,163,78,0.3); border-radius: 2px; overflow: hidden; position: relative; transition: border-color 0.3s, transform 0.3s; }
     .pack-card:hover { border-color: var(--dorado); transform: translateY(-4px); }
     .pack-card-img { background: #111; display: flex; align-items: center; justify-content: center; height: 260px; padding: 20px; }
     .pack-card-img img { max-height: 220px; max-width: 100%; object-fit: contain; }
     .pack-card-body { padding: 28px 28px 32px; }
-    .pack-dto-badge {
-      position: absolute; top: 16px; right: 16px;
-      background: rgba(201,163,78,0.15); border: 1px solid var(--dorado);
-      color: var(--dorado); font-size: 10px; font-weight: 700; letter-spacing: 2px;
-      padding: 4px 10px; border-radius: 20px;
-    }
+    .pack-dto-badge { position: absolute; top: 16px; right: 16px; background: rgba(201,163,78,0.15); border: 1px solid var(--dorado); color: var(--dorado); font-size: 10px; font-weight: 700; letter-spacing: 2px; padding: 4px 10px; border-radius: 20px; }
     @media (max-width: 900px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
@@ -317,8 +250,11 @@
 </head>
 <body>
 
+<!-- Toast de modo -->
+<div id="modo-toast">⚡ MODO POSTULACIÓN ACTIVADO</div>
+
 <nav>
-  <div class="nav-logo">
+  <div class="nav-logo" id="nav-logo-trigger" title="Tequi-La-La">
     <img src="img/logo.jpg" alt="Tequi-La-La Logo"/>
     <span>Tequi-La-La</span>
   </div>
@@ -327,15 +263,20 @@
     <li><a href="#menu">Menú</a></li>
     <li><a href="#eventos">Eventos</a></li>
     <li><a href="#gestion">Gestión</a></li>
-    <li><a href="#plantilla">Plantilla</a></li>
+    <li class="solo-postulacion"><a href="#plantilla">Plantilla</a></li>
     <li><a href="#convenios">Convenios</a></li>
-    <li><a href="#direccion">Dirección</a></li>
+    <li class="solo-postulacion"><a href="#direccion">Dirección</a></li>
   </ul>
-  <a href="#contacto" class="nav-discord">Discord</a>
+  <!-- Modo público: nada en el nav derecho / Modo postulación: botón Discord -->
+  <a href="#contacto" class="nav-discord solo-postulacion">Discord</a>
+  <span class="solo-publico" style="width:120px;"></span>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">Postulación Oficial — Leyendas RP</div>
+  <!-- Badge cambia según modo -->
+  <div class="hero-badge solo-postulacion">Postulación Oficial — Leyendas RP</div>
+  <div class="hero-badge solo-publico">Bar · Ring · Sala Privada · Ciudad de Leyendas</div>
   <h1>TEQUI<span>-LA-</span>LA</h1>
   <div class="hero-sub">Bar · Ring · Sala Privada</div>
   <div class="hero-divider"></div>
@@ -343,6 +284,7 @@
   <div class="hero-scroll">Explorar</div>
 </div>
 
+<!-- CONCEPTO -->
 <div id="concepto" style="background:var(--negro); padding: 100px 0;">
   <section>
     <div class="concepto-grid">
@@ -366,6 +308,7 @@
   </section>
 </div>
 
+<!-- ZONAS -->
 <div class="zonas-bg section-full">
   <div class="zonas-inner">
     <div class="section-tag">Instalaciones</div>
@@ -388,103 +331,36 @@
     <div class="section-tag">Carta de consumibles</div>
     <h2 class="section-title">MENÚ <span>OFICIAL</span></h2>
     <div class="section-divider"></div>
-    <p style="color:var(--gris); max-width:680px; font-size:15px; line-height:1.7; margin-bottom:60px;">Los productos disponibles en Tequi-La-La. Calidad, identidad y precio justo. Todo sujeto a aprobación de la administración.</p>
-
-    <!-- Bebidas Alcohólicas -->
+    <p style="color:var(--gris); max-width:680px; font-size:15px; line-height:1.7; margin-bottom:60px;">Los productos disponibles en Tequi-La-La. Calidad, identidad y precio justo.</p>
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🥃 Bebidas Alcohólicas</h3>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/tequila.png" alt="Tequila Shot"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Tequila Shot</div>
-            <div class="menu-item-desc">Solo, con sal y limón. La esencia del local en un chupito.</div>
-            <div class="menu-item-price">55 <span>$</span></div>
-          </div>
-        </div>
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/vodka.png" alt="Vodka con Tónica"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Vodka con Tónica</div>
-            <div class="menu-item-desc">Combinado clásico. Frío, limpio y perfecto para cualquier noche.</div>
-            <div class="menu-item-price">55 <span>$</span></div>
-          </div>
-        </div>
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/margarita.png" alt="Margarita"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Margarita</div>
-            <div class="menu-item-desc">El cóctel de la casa. Sal, limón y tequila en su mejor versión.</div>
-            <div class="menu-item-price">60 <span>$</span></div>
-          </div>
-        </div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/tequila.png" alt="Tequila Shot"/></div><div class="menu-item-info"><div class="menu-item-name">Tequila Shot</div><div class="menu-item-desc">Solo, con sal y limón. La esencia del local en un chupito.</div><div class="menu-item-price">55 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/vodka.png" alt="Vodka con Tónica"/></div><div class="menu-item-info"><div class="menu-item-name">Vodka con Tónica</div><div class="menu-item-desc">Combinado clásico. Frío, limpio y perfecto para cualquier noche.</div><div class="menu-item-price">55 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/margarita.png" alt="Margarita"/></div><div class="menu-item-info"><div class="menu-item-name">Margarita</div><div class="menu-item-desc">El cóctel de la casa. Sal, limón y tequila en su mejor versión.</div><div class="menu-item-price">60 <span>$</span></div></div></div>
       </div>
     </div>
-
-    <!-- Sin Alcohol -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🫧 Sin Alcohol</h3>
       <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;">
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/redbull.png" alt="Red Bull"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Red Bull</div>
-            <div class="menu-item-desc">Energía pura para las noches más largas del ring y la barra.</div>
-            <div class="menu-item-price">15 <span>$</span></div>
-          </div>
-        </div>
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/tonica.png" alt="Tónica"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Tónica</div>
-            <div class="menu-item-desc">Refrescante y elegante. Estilo sin necesidad de alcohol.</div>
-            <div class="menu-item-price">10 <span>$</span></div>
-          </div>
-        </div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/redbull.png" alt="Red Bull"/></div><div class="menu-item-info"><div class="menu-item-name">Red Bull</div><div class="menu-item-desc">Energía pura para las noches más largas del ring y la barra.</div><div class="menu-item-price">15 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/tonica.png" alt="Tónica"/></div><div class="menu-item-info"><div class="menu-item-name">Tónica</div><div class="menu-item-desc">Refrescante y elegante. Estilo sin necesidad de alcohol.</div><div class="menu-item-price">10 <span>$</span></div></div></div>
       </div>
     </div>
-
-    <!-- Para Picar -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🍽️ Para Picar</h3>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/chipss.png" alt="Patatas Chips"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Patatas Chips</div>
-            <div class="menu-item-desc">El clásico de la barra. Con el sello del Tequi-La-La.</div>
-            <div class="menu-item-price">30 <span>$</span></div>
-          </div>
-        </div>
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/ensaladilla.png" alt="Ensaladilla Rusa"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Ensaladilla Rusa</div>
-            <div class="menu-item-desc">Casera, contundente y perfecta para acompañar cualquier velada.</div>
-            <div class="menu-item-price">35 <span>$</span></div>
-          </div>
-        </div>
-        <div class="menu-item-card">
-          <div class="menu-item-img"><img src="img/tortilla.png" alt="Pincho de Tortilla"/></div>
-          <div class="menu-item-info">
-            <div class="menu-item-name">Pincho de Tortilla</div>
-            <div class="menu-item-desc">Jugoso, bien cuajado. El rey de los pinchos de la casa.</div>
-            <div class="menu-item-price">35 <span>$</span></div>
-          </div>
-        </div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/chipss.png" alt="Patatas Chips"/></div><div class="menu-item-info"><div class="menu-item-name">Patatas Chips</div><div class="menu-item-desc">El clásico de la barra. Con el sello del Tequi-La-La.</div><div class="menu-item-price">30 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/ensaladilla.png" alt="Ensaladilla Rusa"/></div><div class="menu-item-info"><div class="menu-item-name">Ensaladilla Rusa</div><div class="menu-item-desc">Casera, contundente y perfecta para acompañar cualquier velada.</div><div class="menu-item-price">35 <span>$</span></div></div></div>
+        <div class="menu-item-card"><div class="menu-item-img"><img src="img/tortilla.png" alt="Pincho de Tortilla"/></div><div class="menu-item-info"><div class="menu-item-name">Pincho de Tortilla</div><div class="menu-item-desc">Jugoso, bien cuajado. El rey de los pinchos de la casa.</div><div class="menu-item-price">35 <span>$</span></div></div></div>
       </div>
     </div>
-
-    <!-- Packs -->
     <div>
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">📦 Packs Sin Alcohol</h3>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-
         <div class="pack-card">
           <div class="pack-dto-badge">5% DTO</div>
-          <div class="pack-card-img">
-            <img src="img/pack 5.png" alt="Pack 5x5"/>
-          </div>
+          <div class="pack-card-img"><img src="img/pack 5.png" alt="Pack 5x5"/></div>
           <div class="pack-card-body">
             <div style="font-family:'Bebas Neue'; font-size:28px; color:var(--dorado); letter-spacing:1px; margin-bottom:8px;">Pack 5x5 Sin Alcohol</div>
             <div style="font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:20px;">5 unidades de cualquier tapa + 5 bebidas sin alcohol a elección. El pack perfecto para grupos y reservas de sala.</div>
@@ -494,12 +370,9 @@
             </div>
           </div>
         </div>
-
         <div class="pack-card">
           <div class="pack-dto-badge">10% DTO</div>
-          <div class="pack-card-img">
-            <img src="img/x10.png" alt="Pack 10x10"/>
-          </div>
+          <div class="pack-card-img"><img src="img/x10.png" alt="Pack 10x10"/></div>
           <div class="pack-card-body">
             <div style="font-family:'Bebas Neue'; font-size:28px; color:var(--dorado); letter-spacing:1px; margin-bottom:8px;">Pack 10x10 Sin Alcohol</div>
             <div style="font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:20px;">10 unidades de cualquier tapa + 10 bebidas sin alcohol a elección. Ideal para eventos privados y grupos grandes.</div>
@@ -509,7 +382,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -550,7 +422,7 @@
     <div class="section-tag">Promoción</div>
     <h2 class="section-title">IMAGEN <span>DE EVENTO</span></h2>
     <div class="section-divider"></div>
-    <p style="color:var(--gris); max-width:600px; font-size:15px; line-height:1.7;">El Tequi-La-La comunica sus eventos con una imagen potente, reconocible y directa. Así se ve la ciudad cuando hay acción.</p>
+    <p style="color:var(--gris); max-width:600px; font-size:15px; line-height:1.7;">El Tequi-La-La comunica sus eventos con una imagen potente, reconocible y directa.</p>
     <div class="carteles-grid">
       <div class="cartel-img"><img src="img/cartel-boxeo.jpg" alt="Evento de boxeo"/></div>
       <div class="cartel-img"><img src="img/cartel-velada.jpg" alt="Velada de boxeo"/></div>
@@ -578,8 +450,8 @@
   </div>
 </div>
 
-<!-- PLANTILLA -->
-<div id="plantilla" class="plantilla-bg">
+<!-- PLANTILLA — solo postulación -->
+<div id="plantilla" class="plantilla-bg solo-postulacion">
   <div class="plantilla-inner">
     <div class="section-tag">Equipo humano</div>
     <h2 class="section-title">NUESTRA <span>PLANTILLA</span></h2>
@@ -629,8 +501,8 @@
   </div>
 </div>
 
-<!-- DIRECCIÓN -->
-<div id="direccion" class="direccion-bg">
+<!-- DIRECCIÓN — solo postulación -->
+<div id="direccion" class="direccion-bg solo-postulacion">
   <div class="direccion-inner">
     <div class="section-tag">Responsables</div>
     <h2 class="section-title">DIRECCIÓN <span>DEL LOCAL</span></h2>
@@ -654,8 +526,8 @@
   </div>
 </div>
 
-<!-- MOTIVOS -->
-<div class="motivos-bg">
+<!-- MOTIVOS — solo postulación -->
+<div class="motivos-bg solo-postulacion">
   <div class="motivos-inner">
     <div class="section-tag">Candidatura</div>
     <h2 class="section-title">POR QUÉ <span>ESTE LOCAL</span></h2>
@@ -671,8 +543,8 @@
   </div>
 </div>
 
-<!-- CIERRE -->
-<div id="contacto" class="cierre">
+<!-- CIERRE POSTULACIÓN — solo postulación -->
+<div id="contacto" class="cierre solo-postulacion">
   <img src="img/logo.jpg" alt="Tequi-La-La"/>
   <h2 class="cierre-title">¿Hablamos?</h2>
   <p class="cierre-sub">Estoy disponible en Discord si quieres hablar sobre la candidatura o ampliar cualquier detalle.</p>
@@ -683,10 +555,66 @@
   <div class="cierre-firma">Tequi-La-La · Postulación Oficial · Leyendas RP · 2026</div>
 </div>
 
+<!-- CIERRE PÚBLICO — solo modo público -->
+<div class="cierre solo-publico">
+  <img src="img/logo.jpg" alt="Tequi-La-La"/>
+  <h2 class="cierre-title">¡Te Esperamos!</h2>
+  <p class="cierre-sub">Tequi-La-La. El único lugar donde la noche, los acuerdos y el combate comparten espacio. Ven y vívelo.</p>
+  <div class="cierre-firma">Tequi-La-La · Bar · Ring · Sala Privada · 2026</div>
+</div>
+
+<!-- FOOTER -->
 <footer>
   <div class="f-logo">TEQUI-LA-LA</div>
-  <div class="f-text">Postulación de gestión comercial · Leyendas RP · 2026</div>
+  <div class="f-text solo-postulacion">Postulación de gestión comercial · Leyendas RP · 2026</div>
+  <div class="f-text solo-publico">Bar · Ring · Sala Privada · Ciudad de Leyendas · 2026</div>
 </footer>
+
+<script>
+  // ── Detección de modo ──────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const esModoPostulacion = params.get('modo') === 'postulacion';
+
+  function activarPostulacion(mostrarToast) {
+    document.body.classList.add('modo-postulacion');
+    document.title = 'Tequi-La-La — Postulación Oficial';
+    if (mostrarToast) {
+      const toast = document.getElementById('modo-toast');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 3000);
+    }
+  }
+
+  if (esModoPostulacion) {
+    activarPostulacion(false);
+  }
+
+  // ── Triple clic en el logo ─────────────────────────────────────────
+  let clickCount = 0;
+  let clickTimer = null;
+  document.getElementById('nav-logo-trigger').addEventListener('click', () => {
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clickCount = 0; }, 700);
+    if (clickCount >= 3) {
+      clickCount = 0;
+      clearTimeout(clickTimer);
+      if (!document.body.classList.contains('modo-postulacion')) {
+        activarPostulacion(true);
+      } else {
+        document.body.classList.remove('modo-postulacion');
+        document.title = 'Tequi-La-La';
+        const toast = document.getElementById('modo-toast');
+        toast.textContent = '🔒 MODO PÚBLICO RESTAURADO';
+        toast.classList.add('visible');
+        setTimeout(() => {
+          toast.classList.remove('visible');
+          setTimeout(() => { toast.textContent = '⚡ MODO POSTULACIÓN ACTIVADO'; }, 400);
+        }, 3000);
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
