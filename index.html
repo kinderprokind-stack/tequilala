@@ -462,6 +462,29 @@
     footer .f-logo { font-family: 'Bebas Neue'; font-size: 18px; color: rgba(201,163,78,0.4); letter-spacing: 2px; }
     footer .f-text { font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 1px; }
 
+    /* ── EFECTO PARALLAX PELUCHE ── */
+    #fondo-parallax {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0; pointer-events: none;
+      display: flex; justify-content: flex-end; align-items: center;
+      padding-right: 10%; opacity: 0.15;
+    }
+    #peluche-img {
+      width: 400px; transform: translateY(0px); will-change: transform;
+    }
+    
+    /* ── ASEGURAR QUE EL CONTENIDO ESTÉ POR DELANTE ── */
+    .hero, #local, .zonas-bg, #menu, .proximos-bg, .reservas-bg, .porq-bg, .uniformes-bg, .convenios-bg, .plantilla-bg, .direccion-bg, .motivos-bg, .cierre, footer {
+      position: relative; z-index: 2;
+    }
+
+    /* ── ANIMACIONES DE SCROLL (INTERACTIVIDAD) ── */
+    .anim-fade-up {
+      opacity: 0; transform: translateY(50px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .anim-fade-up.visible { opacity: 1; transform: translateY(0); }
+
     @media (max-width: 900px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
@@ -477,7 +500,10 @@
 </head>
 <body>
 
-<!-- ── MODAL RESERVA ── -->
+<div id="fondo-parallax">
+  <img src="img/peluche.png" alt="Peluche Fondo" id="peluche-img">
+</div>
+
 <div id="modal-reserva" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
   <div class="modal-box">
     <button class="modal-close" id="modal-cerrar" aria-label="Cerrar">&times;</button>
@@ -522,7 +548,6 @@
 
 <div id="modo-toast">⚡ MODO POSTULACIÓN ACTIVADO</div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo" id="nav-logo-trigger">
     <img src="img/logo.jpg" alt="Tequi-La-La"/>
@@ -541,7 +566,6 @@
   <a href="#contacto" class="nav-discord solo-postulacion">Discord</a>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-badge solo-postulacion">Postulación Oficial — Leyendas RP</div>
   <div class="hero-badge solo-publico">Bar · Ring · Sala Privada</div>
@@ -556,7 +580,6 @@
   <div class="hero-scroll">Explorar</div>
 </div>
 
-<!-- EL LOCAL -->
 <div id="local" style="background:var(--negro); padding: 100px 0;">
   <section>
     <div class="concepto-grid">
@@ -578,7 +601,6 @@
   </section>
 </div>
 
-<!-- ZONAS -->
 <div class="zonas-bg">
   <div class="zonas-inner">
     <div class="section-tag">Instalaciones</div>
@@ -596,7 +618,6 @@
   </div>
 </div>
 
-<!-- MENÚ -->
 <div id="menu" style="background:var(--negro); padding: 100px 0;">
   <div style="max-width:1200px; margin:0 auto; padding:0 40px;">
     <div class="section-tag">Lo que servimos</div>
@@ -604,7 +625,6 @@
     <div class="section-divider"></div>
     <p style="color:var(--gris); max-width:680px; font-size:15px; line-height:1.7; margin-bottom:60px;">Bebidas, cócteles y tapas con identidad propia. Calidad y precio justo, siempre.</p>
 
-    <!-- Bebidas Alcohólicas -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🥃 Bebidas Alcohólicas</h3>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
@@ -614,7 +634,6 @@
       </div>
     </div>
 
-    <!-- Sin Alcohol — ahora 3 columnas con Coca-Cola -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🫧 Sin Alcohol</h3>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
@@ -624,7 +643,6 @@
       </div>
     </div>
 
-    <!-- Para Picar — ahora 2x2 con Nachos -->
     <div style="margin-bottom:60px;">
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">🍽️ Para Picar</h3>
       <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;">
@@ -635,7 +653,6 @@
       </div>
     </div>
 
-    <!-- Packs -->
     <div>
       <h3 style="font-family:'Bebas Neue'; font-size:32px; color:var(--dorado); letter-spacing:2px; border-bottom:1px solid rgba(201,163,78,0.2); padding-bottom:12px; margin-bottom:30px;">📦 Packs Sin Alcohol</h3>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
@@ -646,7 +663,6 @@
   </div>
 </div>
 
-<!-- PRÓXIMOS EVENTOS -->
 <div id="eventos" class="proximos-bg">
   <div class="proximos-inner">
     <div class="section-tag">Agenda</div>
@@ -666,7 +682,6 @@
   </div>
 </div>
 
-<!-- RESERVA TU ESPACIO -->
 <div id="reservas" class="reservas-bg">
   <div class="reservas-inner">
     <div class="section-tag">Para ti, para todos</div>
@@ -703,7 +718,6 @@
   </div>
 </div>
 
-<!-- POR QUÉ ELEGIRNOS -->
 <div class="porq-bg">
   <div class="porq-inner">
     <div class="section-tag">Lo que nos hace diferentes</div>
@@ -722,7 +736,6 @@
   </div>
 </div>
 
-<!-- UNIFORMES -->
 <div class="uniformes-bg">
   <div class="uniformes-inner">
     <div class="section-tag">El equipo</div>
@@ -740,7 +753,6 @@
   </div>
 </div>
 
-<!-- CONVENIOS -->
 <div id="convenios" class="convenios-bg">
   <div class="convenios-inner">
     <div class="section-tag">¿Tienes un negocio?</div>
@@ -758,7 +770,6 @@
   </div>
 </div>
 
-<!-- PLANTILLA — SOLO POSTULACIÓN -->
 <div id="plantilla" class="plantilla-bg solo-postulacion">
   <div class="plantilla-inner">
     <div class="section-tag">Equipo humano</div>
@@ -774,7 +785,6 @@
   </div>
 </div>
 
-<!-- DIRECCIÓN — SOLO POSTULACIÓN -->
 <div id="direccion" class="direccion-bg solo-postulacion">
   <div class="direccion-inner">
     <div class="section-tag">Responsables</div>
@@ -799,7 +809,6 @@
   </div>
 </div>
 
-<!-- MOTIVOS — SOLO POSTULACIÓN -->
 <div class="motivos-bg solo-postulacion">
   <div class="motivos-inner">
     <div class="section-tag">Candidatura</div>
@@ -816,7 +825,6 @@
   </div>
 </div>
 
-<!-- CIERRE POSTULACIÓN -->
 <div id="contacto" class="cierre solo-postulacion">
   <img src="img/logo.jpg" alt="Tequi-La-La"/>
   <h2 class="cierre-title">¿Hablamos?</h2>
@@ -828,7 +836,6 @@
   <div class="cierre-firma">Tequi-La-La · Postulación Oficial · Leyendas RP · 2026</div>
 </div>
 
-<!-- CIERRE PÚBLICO — FORMULARIO DE CONTACTO -->
 <div id="contacto-publico" class="cierre solo-publico">
   <img src="img/logo.jpg" alt="Tequi-La-La"/>
   <h2 class="cierre-title">¿Tienes alguna pregunta?</h2>
@@ -856,7 +863,6 @@
   <div class="f-text solo-publico">Bar · Ring · Sala Privada · 2026</div>
 </footer>
 
-<!-- ── FIREBASE + LÓGICA ── -->
 <script type="module">
   import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
   import { getFirestore, collection, addDoc, Timestamp }
@@ -1000,6 +1006,38 @@
       btnContacto.textContent = 'Enviar mensaje';
       contactoErr.style.display = 'block';
     }
+  });
+
+  // ── 1. EFECTO PARALLAX DEL PELUCHE ──
+  const peluche = document.getElementById('peluche-img');
+  window.addEventListener('scroll', () => {
+    if (peluche) {
+      let scrollY = window.scrollY;
+      peluche.style.transform = `translateY(${scrollY * 0.4}px) rotate(${scrollY * 0.02}deg)`; 
+    }
+  });
+
+  // ── 2. EFECTO DE APARICIÓN AL HACER SCROLL (INTERSECTION OBSERVER) ──
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+
+  const fadeObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const elementosAAnimar = document.querySelectorAll('.zona-card, .menu-item-card, .pack-card, .reserva-card, .concepto-text, .porq-list li, .convenio-card, .rango-card');
+  
+  elementosAAnimar.forEach(el => {
+    el.classList.add('anim-fade-up');
+    fadeObserver.observe(el);
   });
 </script>
 </body>
